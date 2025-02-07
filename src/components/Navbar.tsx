@@ -26,12 +26,12 @@ const Navbar = () => {
 
     return (
         <nav className="bg-white dark:bg-black shadow-md dark:shadow-blue-900/20">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex items-center">
                         <Link href="/" className="flex-shrink-0 flex items-center">
                             <span className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400 transition-colors duration-200">
-                                AI Job Saver
+                                SaveJobs
                             </span>
                         </Link>
                     </div>
@@ -40,7 +40,7 @@ const Navbar = () => {
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`ml-4 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ease-in-out
+                                className={`ml-4 px-3 py-2 rounded-md text-lg font-medium transition-all duration-200 ease-in-out
                 ${pathname === item.href
                                         ? "text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/50"
                                         : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50"

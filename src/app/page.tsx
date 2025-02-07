@@ -7,11 +7,11 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const router = useRouter()
 
-  useEffect(() => {
-    // Check user authentication status here
-    // For demo purposes, we'll just use a random boolean
-    setIsLoggedIn(Math.random() < 0.5)
-  }, [])
+  // useEffect(() => {
+  //   // Check user authentication status here
+  //   // For demo purposes, we'll just use a random boolean
+  //   setIsLoggedIn(Math.random() < 0.5)
+  // }, [])
 
   const handleGetStarted = () => {
     if (isLoggedIn) {
