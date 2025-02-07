@@ -15,8 +15,22 @@ import axios from "axios";
 const Verify = ({ }) => {
     const [code, setCode] = useState("")
     const params = useParams<{ email: string }>()
-    const [timeLeft, setTimeLeft] = useState(600) // 10 minutes in seconds
+    const decodedEmail = decodeURIComponent(params.email)
+    const [timeLeft, setTimeLeft] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const savedEndTime = localStorage.getItem('verificationEndTime')
+            if (savedEndTime) {
+                const endTime = parseInt(savedEndTime)
+                const now = Date.now()
+                const remaining = Math.max(0, Math.floor((endTime - now) / 1000))
+                return remaining || 0
+            }
+        }
+        return 600 // 10 minutes in seconds
+    })
     const [isLoading, setIsLoading] = useState(false)
+    const [resending, setResending] = useState(false)
+    const [resendCount, setResendCount] = useState(0)
     const router = useRouter()
 
 
@@ -25,6 +39,13 @@ const Verify = ({ }) => {
     })
 
     useEffect(() => {
+        // Set end time in localStorage when component mounts or when resend happens
+        if (timeLeft === 600) {
+            const endTime = Date.now() + timeLeft * 1000
+            localStorage.setItem('verificationEndTime', endTime.toString())
+            localStorage.setItem('resendCount', resendCount.toString())
+        }
+
         const timer = setInterval(() => {
             setTimeLeft((prevTime) => {
                 if (prevTime <= 1) {
@@ -36,7 +57,7 @@ const Verify = ({ }) => {
         }, 1000)
 
         return () => clearInterval(timer)
-    }, [])
+    }, [timeLeft, resendCount]) // Add dependencies to restart timer
 
     const onSubmit = async (data: z.infer<typeof verifySchema>) => {
         setIsLoading(true)
@@ -44,15 +65,15 @@ const Verify = ({ }) => {
         try {
 
             const response = await axios.post(`${baseUrl}auth/verify`, {
-                email: params.email,
+                email: decodedEmail,
                 verificationCode: data.code
             }
             )
             console.log(response);
-            console.log("Email: ", params.email);
+            console.log("Email: ", decodedEmail);
             console.log("Code: ", data.code);
-            
-            
+
+
             if (response.status === 200) {
                 toast.success(response.data.message, {
                     position: "top-right",
@@ -67,7 +88,7 @@ const Verify = ({ }) => {
             router.replace("/login")
         } catch (error) {
             console.error(error);
-            
+
             toast.error(error.response?.data?.message || "An error occurred", {
                 position: "top-right",
                 autoClose: 3000,
@@ -83,15 +104,44 @@ const Verify = ({ }) => {
 
     }
 
-    // const handleSubmit = async (e: React.FormEvent) => {
-    //     e.preventDefault()
-    //     setIsLoading(true)
-    //     // Here you would typically send the verification code to your server
-    //     await new Promise((resolve) => setTimeout(resolve, 2000)) // Simulating API call
-    //     setIsLoading(false)
-    //     // Redirect to login page if verification is successful
-    //     router.push("/login")
-    // }
+    const handleResendCode = async () => {
+        setResending(true)
+        try {
+            console.log("Attempting to resend code to:", decodedEmail)
+            
+            const response = await axios.post(`${baseUrl}auth/resend-code`, {
+                email: decodedEmail // Use decoded email
+            })
+            
+            console.log("Resend response:", response.data)
+
+            if (response.data.success) {
+                toast.success("Verification code resent successfully", {
+                    position: "top-right",
+                    autoClose: 3000,
+                })
+
+                // Reset timer and increment resend count
+                setTimeLeft(600)
+                setResendCount(prev => prev + 1)
+
+                // Update localStorage with new end time
+                const endTime = Date.now() + 600 * 1000
+                localStorage.setItem('verificationEndTime', endTime.toString())
+            } else {
+                throw new Error(response.data.message || "Failed to resend code")
+            }
+
+        } catch (error) {
+            console.error("Resend error:", error)
+            toast.error(error.response?.data?.message || "Failed to resend verification code", {
+                position: "top-right",
+                autoClose: 3000,
+            })
+        } finally {
+            setResending(false)
+        }
+    }
 
     const formatTime = (time: number) => {
         const minutes = Math.floor(time / 60)
@@ -140,11 +190,32 @@ const Verify = ({ }) => {
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                         Time remaining: <span className="font-medium text-blue-600 dark:text-blue-500">{formatTime(timeLeft)}</span>
                     </p>
+                    {resendCount > 0 && (
+                        <p className="text-xs text-gray-500 mt-1">
+                            Verification code resent {resendCount} {resendCount === 1 ? 'time' : 'times'}
+                        </p>
+                    )}
                 </div>
                 {timeLeft === 0 && (
-                    <p className="mt-4 text-center text-sm text-red-600 dark:text-red-500">
-                        The verification code has expired. Please request a new one.
-                    </p>
+                    <div className="mt-4 text-center">
+                        <p className="text-sm text-red-600 dark:text-red-500 mb-4">
+                            The verification code has expired.
+                        </p>
+                        <button
+                            onClick={handleResendCode}
+                            disabled={resending}
+                            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                        >
+                            {resending ? (
+                                <>
+                                    <Loader className="animate-spin h-4 w-4 mr-2" />
+                                    Resending...
+                                </>
+                            ) : (
+                                "Resend Verification Code"
+                            )}
+                        </button>
+                    </div>
                 )}
             </div>
 
