@@ -83,7 +83,7 @@ export default function Page() {
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2">
                     <div className="flex items-center gap-2 px-4">
-                        <SidebarTrigger className="-ml-1 w-12 h-12" size="lg" />
+                        <SidebarTrigger className="-ml-1 w-12 h-12" size="lg"/>
                         <Separator orientation="vertical" className="mr-2 h-4" />
                         <Breadcrumb>
                             <BreadcrumbList>
@@ -103,6 +103,9 @@ export default function Page() {
                 <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
                     <div className="space-y-8 mt-10">
                         <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Dashboard Overview</h1>
+
+
+                        {/* overview */}
                         <div className="grid gap-4 lg:gap-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                             {statCards.map((card) => (
                                 <Card
@@ -119,113 +122,127 @@ export default function Page() {
                                 </Card>
                             ))}
                         </div>
-                        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                            <TabsList className="grid w-full grid-cols-3 bg-blue-100 dark:bg-blue-900 rounded-lg p-1">
-                                <TabsTrigger value="overview" className="rounded-md">
-                                    Overview
-                                </TabsTrigger>
-                                <TabsTrigger value="monthly" className="rounded-md">
-                                    Monthly Trend
-                                </TabsTrigger>
-                                <TabsTrigger value="sources" className="rounded-md">
-                                    Job Sources
-                                </TabsTrigger>
-                            </TabsList>
-                            <TabsContent value="overview">
-                                <Card className="bg-white dark:bg-gray-800 shadow-lg">
-                                    <CardHeader>
-                                        <CardTitle className="text-gray-800 dark:text-gray-100">Job Status Distribution</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="h-[300px]">
-                                            <ResponsiveContainer width="100%" height="100%">
-                                                <PieChart>
-                                                    <Pie
-                                                        data={pieChartData}
-                                                        cx="50%"
-                                                        cy="50%"
-                                                        outerRadius={80}
-                                                        fill="#8884d8"
-                                                        dataKey="value"
-                                                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                                                    >
-                                                        {pieChartData.map((entry, index) => (
-                                                            <Cell key={`cell-${index}`} fill={entry.color} />
-                                                        ))}
-                                                    </Pie>
-                                                    <Tooltip />
-                                                </PieChart>
-                                            </ResponsiveContainer>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
-                            <TabsContent value="monthly">
-                                <Card className="bg-white dark:bg-gray-800 shadow-lg">
-                                    <CardHeader>
-                                        <CardTitle className="text-gray-800 dark:text-gray-100">Monthly Job Applications Trend</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="h-[300px]">
-                                            <ResponsiveContainer width="100%" height="100%">
-                                                <LineChart data={lineChartData}>
-                                                    <XAxis dataKey="month" stroke="#888888" />
-                                                    <YAxis stroke="#888888" />
-                                                    <Tooltip />
-                                                    <Line type="monotone" dataKey="applications" stroke="#3B82F6" strokeWidth={2} />
-                                                </LineChart>
-                                            </ResponsiveContainer>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
-                            <TabsContent value="sources">
-                                <Card className="bg-white dark:bg-gray-800 shadow-lg">
-                                    <CardHeader>
-                                        <CardTitle className="text-gray-800 dark:text-gray-100">Jobs by Source</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="h-[300px]">
-                                            <ResponsiveContainer width="100%" height="100%">
-                                                <BarChart data={barChartData}>
-                                                    <XAxis dataKey="source" stroke="#888888" />
-                                                    <YAxis stroke="#888888" />
-                                                    <Tooltip />
-                                                    <Bar dataKey="jobs" fill="#3B82F6" />
-                                                </BarChart>
-                                            </ResponsiveContainer>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
-                        </Tabs>
-                        <Card className="bg-white dark:bg-gray-800 shadow-lg">
-                            <CardHeader>
-                                <CardTitle className="text-gray-800 dark:text-gray-100">Upcoming Job Deadlines & Interviews</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="overflow-x-auto">
-                                    <table className="w-full">
-                                        <thead>
-                                            <tr className="border-b dark:border-gray-700">
-                                                <th className="text-left py-2 text-gray-600 dark:text-gray-300">Company</th>
-                                                <th className="text-left py-2 text-gray-600 dark:text-gray-300">Position</th>
-                                                <th className="text-left py-2 text-gray-600 dark:text-gray-300">Deadline</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {upcomingDeadlines.map((item, index) => (
-                                                <tr key={index} className="border-b dark:border-gray-700">
-                                                    <td className="py-2 text-gray-800 dark:text-gray-100">{item.company}</td>
-                                                    <td className="py-2 text-gray-800 dark:text-gray-100">{item.position}</td>
-                                                    <td className="py-2 text-gray-800 dark:text-gray-100">{item.deadline}</td>
+
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                            {/* tab */}
+                            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                                <TabsList className="grid w-full grid-cols-3 rounded-lg p-1 mb-4 gap-3">
+                                    <TabsTrigger value="overview" className={`rounded-md px-4 py-2 ${activeTab === "overview" ? "bg-slate-700 text-white" : "bg-blue-700 dark:bg-blue-900"
+                                        }`}>
+                                        Overview
+                                    </TabsTrigger>
+                                    <TabsTrigger value="monthly" className={`rounded-md px-4 py-2 ${activeTab === "monthly" ? "bg-slate-700 text-white" : "bg-blue-700 dark:bg-blue-900"
+                                        }`}>
+                                        Monthly Trend
+                                    </TabsTrigger>
+                                    <TabsTrigger value="sources" className={`rounded-md px-4 py-2 ${activeTab === "sources" ? "bg-slate-700 text-white" : "bg-blue-700 dark:bg-blue-900"
+                                        }`}>
+                                        Job Sources
+                                    </TabsTrigger>
+                                </TabsList>
+                                <TabsContent value="overview">
+                                    <Card className="bg-white dark:bg-gray-800 shadow-lg">
+                                        <CardHeader>
+                                            <CardTitle className="text-gray-800 dark:text-gray-100">Job Status Distribution</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="h-[300px]">
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <PieChart>
+                                                        <Pie
+                                                            data={pieChartData}
+                                                            cx="50%"
+                                                            cy="50%"
+                                                            outerRadius={80}
+                                                            fill="#8884d8"
+                                                            dataKey="value"
+                                                            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                                        >
+                                                            {pieChartData.map((entry, index) => (
+                                                                <Cell key={`cell-${index}`} fill={entry.color} />
+                                                            ))}
+                                                        </Pie>
+                                                        <Tooltip />
+                                                    </PieChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
+                                <TabsContent value="monthly">
+                                    <Card className="bg-white dark:bg-gray-800 shadow-lg">
+                                        <CardHeader>
+                                            <CardTitle className="text-gray-800 dark:text-gray-100">Monthly Job Applications Trend</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="h-[300px]">
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <LineChart data={lineChartData}>
+                                                        <XAxis dataKey="month" stroke="#888888" />
+                                                        <YAxis stroke="#888888" />
+                                                        <Tooltip />
+                                                        <Line type="monotone" dataKey="applications" stroke="#3B82F6" strokeWidth={2} />
+                                                    </LineChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
+                                <TabsContent value="sources">
+                                    <Card className="bg-white dark:bg-gray-800 shadow-lg">
+                                        <CardHeader>
+                                            <CardTitle className="text-gray-800 dark:text-gray-100">Jobs by Source</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="h-[300px]">
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <BarChart data={barChartData}>
+                                                        <XAxis dataKey="source" stroke="#888888" />
+                                                        <YAxis stroke="#888888" />
+                                                        <Tooltip />
+                                                        <Bar dataKey="jobs" fill="#3B82F6" />
+                                                    </BarChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
+                            </Tabs>
+
+
+                            {/* upcoming job deadline */}
+                            <Card className="bg-white dark:bg-gray-800 shadow-lg">
+                                <CardHeader>
+                                    <CardTitle className="text-gray-800 dark:text-gray-100">Upcoming Job Deadlines & Interviews</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full">
+                                            <thead>
+                                                <tr className="border-b dark:border-gray-700">
+                                                    <th className="text-left py-2 text-gray-600 dark:text-gray-300">Company</th>
+                                                    <th className="text-left py-2 text-gray-600 dark:text-gray-300">Position</th>
+                                                    <th className="text-left py-2 text-gray-600 dark:text-gray-300">Deadline</th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </CardContent>
-                        </Card>
+                                            </thead>
+                                            <tbody>
+                                                {upcomingDeadlines.map((item, index) => (
+                                                    <tr key={index} className="border-b dark:border-gray-700">
+                                                        <td className="py-2 text-gray-800 dark:text-gray-100">{item.company}</td>
+                                                        <td className="py-2 text-gray-800 dark:text-gray-100">{item.position}</td>
+                                                        <td className="py-2 text-gray-800 dark:text-gray-100">{item.deadline}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+
+
                         <Card className="bg-white dark:bg-gray-800 shadow-lg">
                             <CardHeader>
                                 <CardTitle className="text-gray-800 dark:text-gray-100">Days Since Last Job Added</CardTitle>
