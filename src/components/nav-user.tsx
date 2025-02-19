@@ -1,5 +1,11 @@
 "use client"
 
+// Add these imports
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/useAuth"
+import { deleteCookie } from "cookies-next"
+import { toast } from "react-toastify"
+
 import {
     ChevronsUpDown,
     LogOut,
@@ -35,6 +41,35 @@ export function NavUser({
     }
 }) {
     const { isMobile } = useSidebar()
+    const router = useRouter()
+    const { setUser } = useAuth()
+
+    const handleLogout = () => {
+        try {
+            // Clear localStorage
+            localStorage.removeItem('accessToken')
+            
+            // Clear cookie
+            deleteCookie('accessToken')
+            
+            // Clear user context
+            setUser(null)
+            
+            // Show success toast
+            toast.success("Logged out successfully!", {
+                position: "top-right",
+                autoClose: 3000,
+            })
+            
+            // Redirect to login
+            router.push('/login')
+        } catch {
+            toast.error("Error logging out", {
+                position: "top-right",
+                autoClose: 3000,
+            })
+        }
+    }
 
     return (
         <SidebarMenu>
@@ -76,8 +111,8 @@ export function NavUser({
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <LogOut />
+                        <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                            <LogOut className="mr-2 h-4 w-4" />
                             Log out
                         </DropdownMenuItem>
                     </DropdownMenuContent>
