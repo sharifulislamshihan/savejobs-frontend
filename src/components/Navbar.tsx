@@ -2,26 +2,20 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState} from "react"
 import { Menu, X } from "lucide-react"
 import { ModeToggle } from "./modeToggle"
 
 const Navbar = () => {
     const pathname = usePathname()
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-    useEffect(() => {
-        // Check user authentication status here
-        // For demo purposes, we'll just use a random boolean
-        setIsLoggedIn(Math.random() < 0.5)
-    }, [])
 
     const navItems = [
         { name: "Home", href: "/" },
         { name: "About", href: "/about" },
         { name: "Feedback", href: "/feedback" },
-        { name: isLoggedIn ? "Logout" : "Login", href: isLoggedIn ? "/logout" : "/login" },
+        { name: "Login", href: "/login" },
+        
     ]
 
     return (

@@ -7,7 +7,6 @@ import {
 import React from "react"
 
 import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
 import {
     Sidebar,
     SidebarContent,
@@ -19,6 +18,7 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { ModeToggle } from "./modeToggle"
+import NavUser from "./nav-user"
 
 const data = {
     user: {
@@ -31,18 +31,18 @@ const data = {
     navMain: [
         {
             title: "Overview",
-            url: "#",
+            url: "/dashboard",
             icon: LayoutDashboard,
             isActive: true,
         },
         {
             title: "My Jobs",
-            url: "#",
+            url: "/dashboard/myJobs",
             icon: Briefcase,
         },
         {
             title: "Add Job",
-            url: "#",
+            url: "/dashboard/addJob",
             icon: PlusCircle,
         },
         {
@@ -73,16 +73,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                     <ModeToggle />
                                 </div>
                             </div>
-
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
-            <SidebarContent className="bg-[#f4f5f4] dark:bg-[#201c1c] text-6xl">
+            <SidebarContent className="bg-[#f4f5f4] dark:bg-[#201c1c] xl:text-6xl">
                 <NavMain items={data.navMain} />
             </SidebarContent>
             <SidebarFooter className="bg-[#f4f5f4] dark:bg-[#201c1c]">
-                <NavUser user={data.user} />
+                <NavUser />
             </SidebarFooter>
         </Sidebar>
     )

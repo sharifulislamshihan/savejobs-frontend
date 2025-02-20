@@ -31,36 +31,44 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar"
 
-export function NavUser({
-    user,
-}: {
-    user: {
-        name: string
-        email: string
-        avatar: string
-    }
-}) {
+//import { useContext } from "react"
+//import { AuthContext } from "@/context/AuthContext"
+
+export interface User {
+    name: string;
+    email: string;
+    image?: string;
+}
+
+const NavUser = () => {
     const { isMobile } = useSidebar()
     const router = useRouter()
-    const { setUser } = useAuth()
+    const { user, setUser } = useAuth()
+    //const auth = useContext(AuthContext)
+    // console.log("User from nav user", auth.user);
+    console.log("checking user image", user?.image );
+    
+
+
+
 
     const handleLogout = () => {
         try {
             // Clear localStorage
             localStorage.removeItem('accessToken')
-            
+
             // Clear cookie
             deleteCookie('accessToken')
-            
+
             // Clear user context
             setUser(null)
-            
+
             // Show success toast
             toast.success("Logged out successfully!", {
                 position: "top-right",
                 autoClose: 3000,
             })
-            
+
             // Redirect to login
             router.push('/login')
         } catch {
@@ -81,19 +89,19 @@ export function NavUser({
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
                             <Avatar className="h-16 w-16 rounded-lg">
-                                <AvatarImage src={user.avatar} alt={user.name} />
+                                <AvatarImage src={user?.image} alt={user?.name} />
                                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-lg lg:text-xl leading-tight">
-                                <span className="truncate font-semibold">{user.name}</span>
-                                <span className="truncate text-xs lg:text-sm">{user.email}</span>
+                                <span className="truncate font-semibold">{user?.name}</span>
+                                <span className="truncate text-xs lg:text-sm">{user?.email}</span>
                             </div>
                             <ChevronsUpDown className="ml-auto size-4" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
 
                     <DropdownMenuContent
-                        className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                        className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg bg-[#f4f5f4] dark:bg-[#201c1c]"
                         side={isMobile ? "bottom" : "right"}
                         align="end"
                         sideOffset={4}
@@ -101,12 +109,12 @@ export function NavUser({
                         <DropdownMenuLabel className="p-0 font-normal">
                             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <Avatar className="h-8 w-8 rounded-lg">
-                                    <AvatarImage src={user.avatar} alt={user.name} />
+                                    <AvatarImage src={user?.image} alt={user?.name} />
                                     <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                                 </Avatar>
                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                    <span className="truncate font-semibold">{user.name}</span>
-                                    <span className="truncate text-xs">{user.email}</span>
+                                    <span className="truncate font-semibold">{user?.name}</span>
+                                    <span className="truncate text-xs">{user?.email}</span>
                                 </div>
                             </div>
                         </DropdownMenuLabel>
@@ -121,3 +129,5 @@ export function NavUser({
         </SidebarMenu>
     )
 }
+
+export default NavUser;

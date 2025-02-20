@@ -11,15 +11,16 @@ import { logInSchema } from "@/schemas/loginSchema"
 import axios from "axios"
 import { baseUrl } from "@/lib/baseUrl"
 import { toast, ToastContainer } from "react-toastify"
-import { useAuth } from "@/hooks/useAuth"
 import { setCookie } from 'cookies-next';
+import { useAuth } from "@/hooks/useAuth"
 
 const Login = () => {
 
     const [showPassword, setShowPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
-    const { setUser } = useAuth()
+
+    const { setUser } = useAuth();
 
     // zod implementation 
     const { register, handleSubmit } = useForm<z.infer<typeof logInSchema>>({
@@ -42,12 +43,11 @@ const Login = () => {
             if (response.data.accessToken) {
                 localStorage.setItem('accessToken', response.data.accessToken);
 
-
                 // Set in cookies
                 setCookie('accessToken', response.data.accessToken, {
                     maxAge: 15 * 24 * 60 * 60, // 15 days (matching backend)
                     path: '/',
-                    secure: process.env.NODE_ENV === 'production',
+                    secure: process.env.NODE_ENV === 'development',
                     sameSite: 'strict',
                 });
 
@@ -58,13 +58,13 @@ const Login = () => {
             if (response.status === 200) {
                 toast.success("Logged in successfully!", {
                     position: "top-right",
-                    autoClose: 3000,
+                    autoClose: 2000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
                     draggable: true,
                 });
-                router.push("/dashboard/overview")
+                router.push("/dashboard")
                 console.log("User logged in successfully");
             }
         } catch (error) {
