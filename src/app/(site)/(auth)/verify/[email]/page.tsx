@@ -70,6 +70,7 @@ const Verify = () => {
         return () => clearInterval(timerRef.current!)
     }, [timeLeft])
 
+    // Handle form submission
     const onSubmit = async (data: z.infer<typeof verifySchema>) => {
         setIsLoading(true)
 
@@ -80,8 +81,16 @@ const Verify = () => {
             })
 
             if (response.status === 200) {
-                toast.success(response.data.message, { position: "top-right", autoClose: 3000 })
+                toast.success(response.data.message, {
+                    position: "top-right",
+                    autoClose: 3000
+                })
+
+                // Handle different redirects based on source
+                console.log("checking decodedEmail in verify page", decodedEmail);
+
                 router.replace("/login")
+
             }
         } catch (error) {
             const errorMessage = axios.isAxiosError(error) && error.response?.data?.message
@@ -93,6 +102,7 @@ const Verify = () => {
         }
     }
 
+    // Handle resend code
     const handleResendCode = async () => {
         if (timeLeft > 0) return // Prevent resend if timer is still running
 

@@ -11,6 +11,7 @@ import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { baseUrl } from "@/lib/baseUrl";
 
 type RegisterFormData = z.infer<typeof registerSchema>
 
@@ -35,7 +36,7 @@ const Register = () => {
         setSubmitting(true)
         try {
             console.log("Sending data to backend:", data)
-            const response = await axios.post("http://localhost:5000/auth/register", data)
+            const response = await axios.post(`${baseUrl}auth/register`, data)
             console.log("Backend response:", response.data)
 
             if (response.data.message === "User created successfully") {
@@ -51,7 +52,7 @@ const Register = () => {
 
                 
                 // redirecting to verify page
-                router.replace(`/verify/${data.email}`);
+                router.push(`/verify/${encodeURIComponent(data.email)}?from=register`);
 
 
             } else {

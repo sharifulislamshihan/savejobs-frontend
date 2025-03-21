@@ -141,7 +141,7 @@ const Login = () => {
                             </button>
                         </div>
 
-                        <Link href="#" className="block">
+                        <Link href="/forgetPassword" className="block">
                             <p className="text-sm text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-800 dark:hover:text-blue-300">
                                 Forgot Password?
                             </p>
