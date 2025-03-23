@@ -1,4 +1,3 @@
-// frontend/app/jobs/page.tsx
 "use client";
 
 import { AppSidebar } from "@/components/app-sidebar";
@@ -13,16 +12,12 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { getCookie } from "cookies-next";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { baseUrl } from "@/lib/baseUrl";
 
 // Define the Job type based on your schema
 type Job = {
@@ -74,7 +69,7 @@ const MyJobs = () => {
             }
 
             try {
-                const response = await axios.get("http://localhost:5000/job/user-jobs", {
+                const response = await axios.get(`${baseUrl}job/user-jobs`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -106,7 +101,7 @@ const MyJobs = () => {
         try {
             const token = getCookie("accessToken");
             const response = await axios.put(
-                `http://localhost:5000/job/${jobId}`,
+                `${baseUrl}job/user-jobs/${jobId}`,
                 { status: newStatus },
                 {
                     headers: {
@@ -127,7 +122,7 @@ const MyJobs = () => {
     const handleDelete = async (jobId: string) => {
         try {
             const token = getCookie("accessToken");
-            const response = await axios.delete(`http://localhost:5000/job/${jobId}`, {
+            const response = await axios.delete(`${baseUrl}job/user-jobs/${jobId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -143,111 +138,61 @@ const MyJobs = () => {
         }
     };
 
-    const handleDeleteSelected = async () => {
-        try {
-            const token = getCookie("accessToken");
-            const response = await axios.delete("http://localhost:5000/job/multiple", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                data: { jobIds: selectedJobs },
-            });
-
-            if (response.data.success) {
-                setJobs(jobs.filter((job) => !selectedJobs.includes(job._id)));
-                setSelectedJobs([]);
-                toast.success("Selected jobs deleted successfully");
-            }
-        } catch (error) {
-            toast.error("Failed to delete selected jobs");
-        }
-    };
-
-    const handleDeleteAll = async () => {
-        try {
-            const token = getCookie("accessToken");
-            const response = await axios.delete("http://localhost:5000/job/all", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (response.data.success) {
-                setJobs([]);
-                setSelectedJobs([]);
-                toast.success("All jobs deleted successfully");
-            }
-        } catch (error) {
-            toast.error("Failed to delete all jobs");
-        }
-    };
 
     return (
-        <div>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
             <SidebarProvider>
                 <AppSidebar />
                 <SidebarInset>
                     {/* Header */}
-                    <header className="flex h-16 shrink-0 items-center gap-2">
-                        <div className="flex items-center gap-2 px-4">
-                            <SidebarTrigger className="-ml-1 w-12 h-12" size="lg" />
-                            <Separator orientation="vertical" className="mr-2 h-4" />
+                    <header className=" sticky top-0 z-10 bg-white dark:bg-[#19191b] border-b dark:border-gray-800">
+                        <div className="flex h-16 items-center gap-4 px-4">
+                            <SidebarTrigger className="w-10" />
+                            <Separator orientation="vertical" className="h-6" />
+                            <div className="flex flex-1 items-center gap-4">
+                                <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">My Jobs</h1>
+                            </div>
                         </div>
                     </header>
 
                     {/* Job Table */}
-                    <div className="mx-4 md:mx-7">
-                        <Card className="w-full">
-                            <CardHeader>
-                                <CardTitle className="text-2xl font-bold">Job Listings</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="flex flex-col space-y-4 md:flex-row md:justify-between md:items-center mb-6">
-                                    <div className="flex items-center space-x-2 w-full md:w-auto">
+                    <div className="mx-4 md:mx-7 py-6 overflow-x-scroll">
+                        <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700">
+                            <CardHeader className="border-b dark:border-gray-700">
+                                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                                    <CardTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                                        Job Listings
+                                    </CardTitle>
+                                    <div className="flex items-center gap-2">
                                         <Input
                                             placeholder="Search by company..."
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
-                                            className="max-w-sm"
+                                            className="max-w-sm bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600"
                                         />
-                                        <Button variant="outline" size="icon">
-                                            <Search className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                    <div className="flex space-x-2">
-                                        <Button
-                                            variant="destructive"
-                                            onClick={() => setDeleteDialogOpen(true)}
-                                            disabled={selectedJobs.length === 0}
-                                            className="w-full md:w-auto"
+                                        <Button 
+                                            variant="outline" 
+                                            size="icon"
+                                            className="border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
-                                            Delete Selected
+                                            <Search className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                                         </Button>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="outline" className="w-full md:w-auto">
-                                                    Actions <ChevronDown className="ml-2 h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent>
-                                                <DropdownMenuItem onClick={() => setDeleteAllDialogOpen(true)}>
-                                                    Delete All Jobs
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
                                     </div>
                                 </div>
+                            </CardHeader>
+                            <CardContent className="p-0">
                                 {isLoading ? (
                                     <div className="flex justify-center items-center h-64">
-                                        <Loader2 className="w-8 h-8 animate-spin" />
+                                        <Loader2 className="w-8 h-8 animate-spin text-blue-600 dark:text-blue-400" />
                                     </div>
                                 ) : (
-                                    <div className="overflow-x-auto rounded-lg border dark:border-gray-700">
+                                    <div className="overflow-x-auto">
                                         <Table>
-                                            <TableHeader>
-                                                <TableRow>
+                                            <TableHeader className="text-black dark:text-white">
+                                                <TableRow className="bg-gray-50 dark:bg-gray-800/50">
                                                     <TableHead className="w-[50px]">
                                                         <Checkbox
+                                                        className="border-black dark:border-white"
                                                             checked={selectedJobs.length === filteredJobs.length}
                                                             onCheckedChange={(checked) => {
                                                                 setSelectedJobs(checked ? filteredJobs.map((job) => job._id) : []);
@@ -262,12 +207,19 @@ const MyJobs = () => {
                                                     <TableHead>Actions</TableHead>
                                                 </TableRow>
                                             </TableHeader>
-                                            <TableBody>
-                                                {filteredJobs.map((job) => (
+                                            <TableBody className="text-black dark:text-white">
+                                                {filteredJobs.map((job, index) => (
                                                     <TableRow
                                                         key={job._id}
-                                                        onClick={() => router.push(`/jobs/${job._id}`)}
-                                                        className="cursor-pointer hover:bg-gray-800"
+                                                        onClick={() => router.push(`myJobs/${job._id}`)}
+                                                        className={`
+                                                            cursor-pointer
+                                                            ${index % 2 === 0 
+                                                                ? 'bg-white dark:bg-gray-800' 
+                                                                : 'bg-gray-100 dark:bg-gray-900'}
+                                                            hover:bg-blue-50 dark:hover:bg-blue-900/20
+                                                            transition-colors duration-150
+                                                        `}
                                                     >
                                                         <TableCell onClick={(e) => e.stopPropagation()}>
                                                             <Checkbox
@@ -293,7 +245,7 @@ const MyJobs = () => {
                                                                 <SelectTrigger className="w-[150px]">
                                                                     <SelectValue>{job.status}</SelectValue>
                                                                 </SelectTrigger>
-                                                                <SelectContent className="bg-black">
+                                                                <SelectContent className="bg-gray-100 text-black dark:bg-gray-800 dark:text-white">
                                                                     {statusOptions.map((status) => (
                                                                         <SelectItem key={status} value={status}>
                                                                             {status}
@@ -307,14 +259,14 @@ const MyJobs = () => {
                                                                 <Button
                                                                     variant="ghost"
                                                                     size="icon"
-                                                                    onClick={() => router.push(`/jobs/${job._id}`)}
+                                                                    onClick={() => router.push(`myJobs/${job._id}`)}
                                                                 >
                                                                     <Eye className="h-4 w-4" />
                                                                 </Button>
                                                                 <Button
                                                                     variant="ghost"
                                                                     size="icon"
-                                                                    onClick={() => router.push(`/jobs/${job._id}/edit`)}
+                                                                    onClick={() => router.push(`/dashboard/myJobs/${job._id}/edit`)}
                                                                 >
                                                                     <Pencil className="h-4 w-4" />
                                                                 </Button>
@@ -340,28 +292,37 @@ const MyJobs = () => {
                         </Card>
                     </div>
 
+                    {/* Status Select Styling */}
+                    <style jsx global>{`
+                        .status-not-applied { @apply bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200; }
+                        .status-applied { @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200; }
+                        .status-interview { @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200; }
+                        .status-rejected { @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200; }
+                        .status-accepted { @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200; }
+                    `}</style>
+
                     {/* Delete Confirmation Dialogs */}
                     <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                        <AlertDialogContent>
+                        <AlertDialogContent className="bg-white dark:bg-gray-800 border dark:border-gray-700">
                             <AlertDialogHeader>
-                                <AlertDialogTitle>
+                                <AlertDialogTitle className="text-gray-900 dark:text-gray-100">
                                     {jobToDelete ? "Delete Job" : "Delete Selected Jobs"}
                                 </AlertDialogTitle>
-                                <AlertDialogDescription>
+                                <AlertDialogDescription className="text-gray-600 dark:text-gray-400">
                                     {jobToDelete
                                         ? "Are you sure you want to delete this job? This action cannot be undone."
                                         : "Are you sure you want to delete the selected jobs? This action cannot be undone."}
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
+                                <AlertDialogCancel className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">Cancel</AlertDialogCancel>
+                                <AlertDialogAction className="bg-red-500 hover:bg-red-600 text-white"
                                     onClick={() => {
                                         if (jobToDelete) {
                                             handleDelete(jobToDelete);
                                             setJobToDelete(null);
                                         } else {
-                                            handleDeleteSelected();
+                                            // handleDeleteSelected();
                                         }
                                     }}
                                 >
@@ -372,19 +333,20 @@ const MyJobs = () => {
                     </AlertDialog>
 
                     <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
-                        <AlertDialogContent>
+                        <AlertDialogContent className="bg-white dark:bg-gray-800 border dark:border-gray-700">
                             <AlertDialogHeader>
-                                <AlertDialogTitle>Delete All Jobs</AlertDialogTitle>
-                                <AlertDialogDescription>
+                                <AlertDialogTitle className="text-gray-900 dark:text-gray-100">Delete All Jobs</AlertDialogTitle>
+                                <AlertDialogDescription className="text-gray-600 dark:text-gray-400">
                                     Are you sure you want to delete all jobs? This action cannot be undone.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleDeleteAll}>Delete</AlertDialogAction>
+                                <AlertDialogCancel className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">Cancel</AlertDialogCancel>
+                                {/* <AlertDialogAction onClick={handleDeleteAll}>Delete</AlertDialogAction> */}
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
+
 
                     {/* Toast */}
                     <ToastContainer
