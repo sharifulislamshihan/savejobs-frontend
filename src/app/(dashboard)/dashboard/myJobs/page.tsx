@@ -18,6 +18,7 @@ import { getCookie } from "cookies-next";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { baseUrl } from "@/lib/baseUrl";
+import Loading from "@/components/loading";
 
 // Define the Job type based on your schema
 type Job = {
@@ -77,7 +78,6 @@ const MyJobs = () => {
 
                 if (response.data.success) {
                     setJobs(response.data.data);
-                    toast.success("Jobs fetched successfully");
                 }
             } catch (error: unknown) {
                 const errorMessage =
@@ -138,6 +138,45 @@ const MyJobs = () => {
         }
     };
 
+    const handleDeleteSelected = async () => {
+        try {
+            const token = getCookie("accessToken");
+            const response = await axios.delete(`${baseUrl}job/user-jobs/multiple`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                data: { jobIds: selectedJobs },
+            });
+
+            if (response.data.success) {
+                setJobs(jobs.filter((job) => !selectedJobs.includes(job._id)));
+                setSelectedJobs([]);
+                toast.success("Selected jobs deleted successfully");
+            }
+        } catch (error) {
+            toast.error("Failed to delete selected jobs");
+        }
+    };
+
+    const handleDeleteAll = async () => {
+        try {
+            const token = getCookie("accessToken");
+            const response = await axios.delete(`${baseUrl}job/user-jobs/all`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.data.success) {
+                setJobs([]);
+                setSelectedJobs([]);
+                toast.success("All jobs deleted successfully");
+            }
+        } catch (error) {
+            toast.error("Failed to delete all jobs");
+        }
+    };
+
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -156,35 +195,62 @@ const MyJobs = () => {
                     </header>
 
                     {/* Job Table */}
-                    <div className="mx-4 md:mx-7 py-6 overflow-x-scroll">
+                    <div className="mx-4 md:mx-7 py-6 overflow-x-auto">
                         <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700">
                             <CardHeader className="border-b dark:border-gray-700">
                                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                                     <CardTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                                         Job Listings
                                     </CardTitle>
-                                    <div className="flex items-center gap-2">
-                                        <Input
-                                            placeholder="Search by company..."
-                                            value={searchTerm}
-                                            onChange={(e) => setSearchTerm(e.target.value)}
-                                            className="max-w-sm bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600"
-                                        />
-                                        <Button 
-                                            variant="outline" 
-                                            size="icon"
-                                            className="border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        >
-                                            <Search className="h-4 w-4 text-gray-600 dark:text-gray-400" />
-                                        </Button>
+                                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                                        <div className="flex items-center gap-2 w-full sm:w-auto">
+                                            <Input
+                                                placeholder="Search by company..."
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                                className="w-full sm:w-[200px] md:w-[300px] bg-gray-50 dark:bg-gray-700 
+                                                    border-gray-200 dark:border-gray-600"
+                                            />
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="border-gray-200 dark:border-gray-600 
+                                                    hover:bg-gray-100 dark:hover:bg-gray-700"
+                                            >
+                                                <Search className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                                            </Button>
+                                        </div>
+
+                                        {selectedJobs.length > 0 && (
+                                            <div className="flex items-center gap-2">
+                                                <Button
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    onClick={() => setDeleteDialogOpen(true)}
+                                                    className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2"
+                                                >
+                                                    <Trash className="h-4 w-4" />
+                                                    <span>Delete Selected ({selectedJobs.length})</span>
+                                                </Button>
+                                                {selectedJobs.length === jobs.length && (
+                                                    <Button
+                                                        variant="destructive"
+                                                        size="sm"
+                                                        onClick={() => setDeleteAllDialogOpen(true)}
+                                                        className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-2"
+                                                    >
+                                                        <Trash className="h-4 w-4" />
+                                                        <span>Delete All</span>
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </CardHeader>
                             <CardContent className="p-0">
                                 {isLoading ? (
-                                    <div className="flex justify-center items-center h-64">
-                                        <Loader2 className="w-8 h-8 animate-spin text-blue-600 dark:text-blue-400" />
-                                    </div>
+                                    <Loading/>
                                 ) : (
                                     <div className="overflow-x-auto">
                                         <Table>
@@ -192,7 +258,7 @@ const MyJobs = () => {
                                                 <TableRow className="bg-gray-50 dark:bg-gray-800/50">
                                                     <TableHead className="w-[50px]">
                                                         <Checkbox
-                                                        className="border-black dark:border-white"
+                                                            className="border-black dark:border-white"
                                                             checked={selectedJobs.length === filteredJobs.length}
                                                             onCheckedChange={(checked) => {
                                                                 setSelectedJobs(checked ? filteredJobs.map((job) => job._id) : []);
@@ -214,8 +280,8 @@ const MyJobs = () => {
                                                         onClick={() => router.push(`myJobs/${job._id}`)}
                                                         className={`
                                                             cursor-pointer
-                                                            ${index % 2 === 0 
-                                                                ? 'bg-white dark:bg-gray-800' 
+                                                            ${index % 2 === 0
+                                                                ? 'bg-white dark:bg-gray-800'
                                                                 : 'bg-gray-100 dark:bg-gray-900'}
                                                             hover:bg-blue-50 dark:hover:bg-blue-900/20
                                                             transition-colors duration-150
@@ -292,39 +358,40 @@ const MyJobs = () => {
                         </Card>
                     </div>
 
-                    {/* Status Select Styling */}
-                    <style jsx global>{`
-                        .status-not-applied { @apply bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200; }
-                        .status-applied { @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200; }
-                        .status-interview { @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200; }
-                        .status-rejected { @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200; }
-                        .status-accepted { @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200; }
-                    `}</style>
-
                     {/* Delete Confirmation Dialogs */}
                     <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                        <AlertDialogContent className="bg-white dark:bg-gray-800 border dark:border-gray-700">
-                            <AlertDialogHeader>
-                                <AlertDialogTitle className="text-gray-900 dark:text-gray-100">
+                        <AlertDialogContent className="bg-white dark:bg-gray-800 border dark:border-gray-700 max-w-md w-[95%] rounded-lg shadow-lg">
+                            <AlertDialogHeader className="space-y-3">
+                                <AlertDialogTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                                     {jobToDelete ? "Delete Job" : "Delete Selected Jobs"}
                                 </AlertDialogTitle>
-                                <AlertDialogDescription className="text-gray-600 dark:text-gray-400">
+                                <AlertDialogDescription className="text-gray-600 dark:text-gray-400 text-base">
                                     {jobToDelete
                                         ? "Are you sure you want to delete this job? This action cannot be undone."
-                                        : "Are you sure you want to delete the selected jobs? This action cannot be undone."}
+                                        : `Are you sure you want to delete ${selectedJobs.length} selected job${selectedJobs.length > 1 ? 's' : ''}? This action cannot be undone.`}
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">Cancel</AlertDialogCancel>
-                                <AlertDialogAction className="bg-red-500 hover:bg-red-600 text-white"
+                            <AlertDialogFooter className="sm:space-x-2">
+                                <AlertDialogCancel className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 
+                                    dark:bg-gray-700 dark:hover:bg-gray-600
+                                    text-gray-900 dark:text-gray-100 
+                                    border border-gray-200 dark:border-gray-600
+                                    transition-colors duration-200">
+                                    Cancel
+                                </AlertDialogCancel>
+                                <AlertDialogAction
                                     onClick={() => {
                                         if (jobToDelete) {
                                             handleDelete(jobToDelete);
                                             setJobToDelete(null);
                                         } else {
-                                            // handleDeleteSelected();
+                                            handleDeleteSelected();
                                         }
                                     }}
+                                    className="w-full sm:w-auto bg-red-500 hover:bg-red-600 
+                                        dark:bg-red-600 dark:hover:bg-red-700
+                                        text-white font-medium
+                                        transition-colors duration-200"
                                 >
                                     Delete
                                 </AlertDialogAction>
@@ -333,16 +400,32 @@ const MyJobs = () => {
                     </AlertDialog>
 
                     <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
-                        <AlertDialogContent className="bg-white dark:bg-gray-800 border dark:border-gray-700">
-                            <AlertDialogHeader>
-                                <AlertDialogTitle className="text-gray-900 dark:text-gray-100">Delete All Jobs</AlertDialogTitle>
-                                <AlertDialogDescription className="text-gray-600 dark:text-gray-400">
-                                    Are you sure you want to delete all jobs? This action cannot be undone.
+                        <AlertDialogContent className="bg-white dark:bg-gray-800 border dark:border-gray-700 max-w-md w-[95%] rounded-lg shadow-lg">
+                            <AlertDialogHeader className="space-y-3">
+                                <AlertDialogTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                                    Delete All Jobs
+                                </AlertDialogTitle>
+                                <AlertDialogDescription className="text-gray-600 dark:text-gray-400 text-base">
+                                    Are you sure you want to delete all {jobs.length} jobs? This action cannot be undone.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">Cancel</AlertDialogCancel>
-                                {/* <AlertDialogAction onClick={handleDeleteAll}>Delete</AlertDialogAction> */}
+                            <AlertDialogFooter className="sm:space-x-2">
+                                <AlertDialogCancel className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 
+                                    dark:bg-gray-700 dark:hover:bg-gray-600
+                                    text-gray-900 dark:text-gray-100 
+                                    border border-gray-200 dark:border-gray-600
+                                    transition-colors duration-200">
+                                    Cancel
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={handleDeleteAll}
+                                    className="w-full sm:w-auto bg-red-600 hover:bg-red-700 
+                                        dark:bg-red-700 dark:hover:bg-red-800
+                                        text-white font-medium
+                                        transition-colors duration-200"
+                                >
+                                    Delete All
+                                </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>

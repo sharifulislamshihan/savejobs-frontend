@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { baseUrl } from "@/lib/baseUrl"
 import { forgotPasswordSchema } from "@/schemas/forgotPasswordSchema"
+import Loading from "@/components/loading"
 
 type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>
 
@@ -93,7 +94,7 @@ export default function ForgotPassword() {
                                 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700"
                         >
                             {isLoading ? (
-                                <Loader2 className="h-5 w-5 animate-spin" />
+                                <Loading/>
                             ) : (
                                 "Send Reset Code"
                             )}

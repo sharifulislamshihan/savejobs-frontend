@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { baseUrl } from "@/lib/baseUrl"
 import { resetPasswordSchema } from "@/schemas/resetPasswordSchema"
+import Loading from "@/components/loading"
 
 
 const ResetPassword = () => {
@@ -216,7 +217,7 @@ const ResetPassword = () => {
                             className="w-full mt-4 py-2 px-4 border rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
                         >
                             {isLoading ? (
-                                <Loader2 className="h-5 w-5 animate-spin" />
+                                <Loading />
                             ) : (
                                 "Reset Password"
                             )}

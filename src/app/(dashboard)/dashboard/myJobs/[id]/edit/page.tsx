@@ -19,6 +19,7 @@ import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/s
 import { Separator } from "@radix-ui/react-separator";
 import { jobSchema } from "@/schemas/jobSchema";
 import { baseUrl } from "@/lib/baseUrl";
+import Loading from "@/components/loading";
 
 // Zod schema for form validation
 
@@ -145,7 +146,7 @@ const EditJob = () => {
         }
     };
 
-    if (isLoading) return <div className="flex justify-center items-center h-screen"><span>Loading...</span></div>;
+    if (isLoading) return <Loading/>;
     if (!job) return <div className="flex justify-center items-center h-screen"><span>Job not found</span></div>;
 
     return (

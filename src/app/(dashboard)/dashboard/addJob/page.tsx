@@ -21,6 +21,7 @@ import { baseUrl } from "@/lib/baseUrl";
 import { useAuth } from "@/hooks/useAuth";
 import { toast, ToastContainer } from "react-toastify";
 import { getCookie } from "cookies-next";
+import Loading from "@/components/loading";
 
 type jobDescriptionSchema = z.infer<typeof jobDescriptionSchema>
 
@@ -126,7 +127,7 @@ const AddJob = () => {
                                     >
                                         {isLoading ? (
                                             <>
-                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                <Loading/>
                                                 Processing
                                             </>
                                         ) : (
