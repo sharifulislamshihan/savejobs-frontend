@@ -158,7 +158,7 @@ const Register = () => {
                         </button>
                     </div>
                 </form>
-                <div className="mt-6">
+                {/* <div className="mt-6">
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
                             <div className="w-full border-t border-gray-700"></div>
@@ -194,7 +194,7 @@ const Register = () => {
                             Sign up with Google
                         </button>
                     </div>
-                </div>
+                </div> */}
                 <p className="mt-8 text-center text-sm text-gray-700 dark:text-gray-400">
                     Already have an account?{" "}
                     <Link href="/login" className="font-medium text-blue-500 hover:text-blue-400">

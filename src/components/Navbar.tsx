@@ -2,21 +2,40 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState} from "react"
+import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import { ModeToggle } from "./modeToggle"
+import { useAuth } from "@/hooks/useAuth"
 
 const Navbar = () => {
     const pathname = usePathname()
     const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-    const navItems = [
+    const { user } = useAuth() // Assuming useAuth returns an object with user
+    const [navItems, setNavItems] = useState([
         { name: "Home", href: "/" },
         { name: "About", href: "/about" },
         { name: "Feedback", href: "/feedback" },
-        { name: "Login", href: "/login" },
-        
-    ]
+        { name: "Login", href: "/login" }
+    ])
+
+    useEffect(() => {
+        // Update nav items when user auth state changes
+        if (user) {
+            setNavItems([
+                { name: "Home", href: "/" },
+                { name: "About", href: "/about" },
+                { name: "Feedback", href: "/feedback" },
+                { name: "Dashboard", href: "/dashboard" }
+            ])
+        } else {
+            setNavItems([
+                { name: "Home", href: "/" },
+                { name: "About", href: "/about" },
+                { name: "Feedback", href: "/feedback" },
+                { name: "Login", href: "/login" }
+            ])
+        }
+    }, [user])
 
     return (
         <div className="bg-white dark:bg-black shadow-md dark:shadow-blue-900/20">
@@ -29,13 +48,13 @@ const Navbar = () => {
                             </span>
                         </Link>
                     </div>
-                    <div className="hidden md:flex items-center">
+                    <div className="hidden md:flex items-center gap-4">
                         {navItems.map((item) => (
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`ml-4 px-3 py-2 rounded-md text-lg font-medium transition-all duration-200 ease-in-out
-                ${pathname === item.href
+                                className={`px-3 py-2 rounded-md text-lg font-medium transition-all duration-200 ease-in-out
+                                    ${pathname === item.href
                                         ? "text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/50"
                                         : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50"
                                     }`}
@@ -43,10 +62,7 @@ const Navbar = () => {
                                 {item.name}
                             </Link>
                         ))}
-
-                        {/* dark mood */}
                         <ModeToggle />
-
                     </div>
                     <div className="md:hidden flex items-center">
                         <button
@@ -66,7 +82,7 @@ const Navbar = () => {
                                 key={item.name}
                                 href={item.href}
                                 className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-200 ease-in-out
-                ${pathname === item.href
+                                    ${pathname === item.href
                                         ? "text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/50"
                                         : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50"
                                     }`}
@@ -75,10 +91,9 @@ const Navbar = () => {
                                 {item.name}
                             </Link>
                         ))}
-
-                        {/* dark mood */}
-                        <ModeToggle />
-
+                        <div className="px-3 py-2">
+                            <ModeToggle />
+                        </div>
                     </div>
                 </div>
             )}

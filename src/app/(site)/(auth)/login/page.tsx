@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Eye, EyeOff, Loader } from "lucide-react"
+import { Eye, EyeOff} from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -48,7 +48,7 @@ const Login = () => {
                 setCookie('accessToken', response.data.accessToken, {
                     maxAge: 15 * 24 * 60 * 60, // 15 days (matching backend)
                     path: '/',
-                    secure: process.env.NODE_ENV === 'development',
+                    secure: process.env.NODE_ENV === 'production',
                     sameSite: 'strict',
                 });
 
@@ -159,14 +159,17 @@ const Login = () => {
                 </form>
 
                 <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
+                    {/* <div className="absolute inset-0 flex items-center">
                         <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
-                    </div>
-                    <div className="relative flex justify-center text-base">
+                    </div> */}
+
+
+                    {/* this is for google sign */}
+                    {/* <div className="relative flex justify-center text-base">
                         <span className="px-2 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400">
                             Or continue with
                         </span>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* ... Google sign in button (if needed) ... */}
