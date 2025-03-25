@@ -1,20 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/useAuth"
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const router = useRouter()
+  const user = useAuth();
 
-  // useEffect(() => {
-  //   // Check user authentication status here
-  //   // For demo purposes, we'll just use a random boolean
-  //   setIsLoggedIn(Math.random() < 0.5)
-  // }, [])
 
   const handleGetStarted = () => {
-    if (isLoggedIn) {
+    if (user) {
       router.push("/dashboard")
     } else {
       router.push("/login")
