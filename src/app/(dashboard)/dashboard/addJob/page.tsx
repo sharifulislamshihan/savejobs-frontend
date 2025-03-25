@@ -47,7 +47,7 @@ const AddJob = () => {
         }
     )
 
-    console.log("Checking this user id from add jobs", user);
+    //console.log("Checking this user id from add jobs", user);
 
     const onSubmit = async (formData: jobDescriptionSchema) => {
 
@@ -58,7 +58,7 @@ const AddJob = () => {
                 setIsLoading(false);
                 return;
             }
-            console.log("data sending for loggedin user", user.id, formData.jobData);
+            //console.log("data sending for loggedin user", user.id, formData.jobData);
 
             const token = getCookie("accessToken");
 

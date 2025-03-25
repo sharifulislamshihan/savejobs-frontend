@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const checkUser = async () => {
             const token = getCookie("accessToken");
 
-            console.log("Token from auth context", token);
+            //console.log("Token from auth context", token);
 
             if (!token) {
                 return;
@@ -37,19 +37,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true,
                 });
-                console.log("Response from auth context", response.data.data);
+                //console.log("Response from auth context", response.data.data);
 
 
                 if (response.data.success) {
                     setUser(response.data.data);
-                    console.log("User from auth context response", response.data.user);
+                    //console.log("User from auth context response", response.data.user);
 
                 }
             } catch (error) {
                 console.error("Error checking user:", error);
             }
         };
-        console.log("Checking user from auth context", user);
+        //console.log("Checking user from auth context", user);
 
         checkUser();
     }, []);

@@ -12,13 +12,13 @@ export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
 
     // Debug logging
-    console.log('Current path:', pathname)
-    console.log('Token exists:', !!token)
+    //console.log('Current path:', pathname)
+    //console.log('Token exists:', !!token)
 
     // Handle protected routes - redirect to login if no token
     if (protectedRoutes.some(route => pathname.startsWith(route))) {
         if (!token) {
-            console.log('No token found, redirecting to login')
+            //console.log('No token found, redirecting to login')
             return NextResponse.redirect(new URL('/login', request.url))
         }
     }
@@ -26,7 +26,7 @@ export function middleware(request: NextRequest) {
     // Handle auth routes - redirect to dashboard if token exists
     if (authRoutes.some(route => pathname.startsWith(route))) {
         if (token) {
-            console.log('Token found, redirecting to dashboard')
+            //console.log('Token found, redirecting to dashboard')
             return NextResponse.redirect(new URL('/dashboard', request.url))
         }
     }

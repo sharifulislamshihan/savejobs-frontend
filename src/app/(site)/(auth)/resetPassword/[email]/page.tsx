@@ -45,7 +45,7 @@ const ResetPassword = () => {
                 // Get expiry time from backend
                 const expiryTime = new Date(response.data.data.verificationCodeExpiration).getTime();
                 //const expiryTime = response.data.data.verificationCodeExpiration
-                console.log("expiryTime", expiryTime);
+                //console.log("expiryTime", expiryTime);
 
                 const now = Date.now()
                 const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000))
@@ -108,8 +108,8 @@ const ResetPassword = () => {
                         autoClose: 2000
                     })
             }
-        } catch (error) {
-            console.log("Failed to resend verification code", error);
+        } catch {
+            //console.log("Failed to resend verification code", error);
 
             toast.error("Failed to resend verification code", 
                 { 

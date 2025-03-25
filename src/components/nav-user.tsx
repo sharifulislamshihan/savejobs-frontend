@@ -45,8 +45,8 @@ const NavUser = () => {
     const router = useRouter()
     const { user, setUser } = useAuth()
     //const auth = useContext(AuthContext)
-    // console.log("User from nav user", auth.user);
-    console.log("checking user image", user?.image );
+    // //console.log("User from nav user", auth.user);
+    //console.log("checking user image", user?.image );
     
 
 

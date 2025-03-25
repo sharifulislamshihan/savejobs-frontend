@@ -35,9 +35,9 @@ const Register = () => {
     const onSubmit = async (data: RegisterFormData) => {
         setSubmitting(true)
         try {
-            console.log("Sending data to backend:", data)
+            //console.log("Sending data to backend:", data)
             const response = await axios.post(`${baseUrl}auth/register`, data)
-            console.log("Backend response:", response.data)
+            //console.log("Backend response:", response.data)
 
             if (response.data.message === "User created successfully") {
                 toast.success(response.data.message, {

@@ -34,10 +34,10 @@ const Login = () => {
     const onSubmit = async (data: z.infer<typeof logInSchema>) => {
         setIsLoading(true)
         try {
-            console.log("data sending for loggedin user", data);
+            //console.log("data sending for loggedin user", data);
             const response = await axios.post(`${baseUrl}auth/login`, data)
-            console.log("response", response);
-            console.log("token", response.data.accessToken);
+            //console.log("response", response);
+            //console.log("token", response.data.accessToken);
 
             //  // Store token in both localStorage and cookies
             if (response.data.accessToken) {
@@ -65,7 +65,7 @@ const Login = () => {
                     draggable: true,
                 });
                 router.push("/dashboard")
-                console.log("User logged in successfully");
+                //console.log("User logged in successfully");
             }
         } catch (error) {
 
