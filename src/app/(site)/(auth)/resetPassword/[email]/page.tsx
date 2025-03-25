@@ -137,6 +137,7 @@ const ResetPassword = () => {
                 })
                 router.push('/login')
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Failed to reset password"
             toast.error(errorMessage, {

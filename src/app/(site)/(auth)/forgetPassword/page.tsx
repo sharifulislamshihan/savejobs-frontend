@@ -8,7 +8,6 @@ import { z } from "zod"
 import axios from "axios"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -45,6 +44,7 @@ export default function ForgotPassword() {
                 // Update this line to redirect to reset page instead of verify
                 router.push(`/resetPassword/${encodeURIComponent(data.email)}`)
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Something went wrong"
             toast.error(errorMessage, {
