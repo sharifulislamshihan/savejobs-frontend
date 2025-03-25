@@ -42,7 +42,7 @@ const Register = () => {
             if (response.data.message === "User created successfully") {
                 toast.success(response.data.message, {
                     position: "top-right",
-                    autoClose: 3000,
+                    autoClose: 1000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -50,15 +50,15 @@ const Register = () => {
                 });
 
 
-                
+
                 // redirecting to verify page
-                router.push(`/verify/${encodeURIComponent(data.email)}?from=register`);
+                router.push(`/verify/${encodeURIComponent(data.email)}`);
 
 
             } else {
                 toast.error(response.data.message, {
                     position: "top-right",
-                    autoClose: 3000,
+                    autoClose: 2000,
                 });
             }
         }
@@ -69,7 +69,7 @@ const Register = () => {
 
             toast.error(errorMessage, {
                 position: "top-right",
-                autoClose: 3000,
+                autoClose: 2000,
             });
         }
         finally {
@@ -205,7 +205,6 @@ const Register = () => {
 
             <ToastContainer
                 position="top-right"
-                autoClose={3000}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick

@@ -66,7 +66,7 @@ const NavUser = () => {
             // Show success toast
             toast.success("Logged out successfully!", {
                 position: "top-right",
-                autoClose: 3000,
+                autoClose: 1000,
             })
 
             // Redirect to login
@@ -74,7 +74,7 @@ const NavUser = () => {
         } catch {
             toast.error("Error logging out", {
                 position: "top-right",
-                autoClose: 3000,
+                autoClose: 2000,
             })
         }
     }

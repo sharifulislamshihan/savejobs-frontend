@@ -94,7 +94,7 @@ export default function ForgotPassword() {
                                 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700"
                         >
                             {isLoading ? (
-                                <Loading/>
+                                <Loading />
                             ) : (
                                 "Send Reset Code"
                             )}
@@ -116,8 +116,7 @@ export default function ForgotPassword() {
             </Card>
 
             <ToastContainer
-                position="top-right"
-                autoClose={3000}
+                position="top-right" 
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick

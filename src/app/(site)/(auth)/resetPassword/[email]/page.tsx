@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import axios from "axios"
 import { toast } from "react-toastify"
-import { Loader, Loader2 } from "lucide-react"
+import { Loader } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -102,12 +102,20 @@ const ResetPassword = () => {
                 localStorage.setItem('verificationEndTime', newEndTime.toString())
                 setTimeLeft(600)
 
-                toast.success("Verification code resent successfully", { position: "top-right", autoClose: 3000 })
+                toast.success("Verification code resent successfully",
+                    {
+                        position: "top-right",
+                        autoClose: 2000
+                    })
             }
         } catch (error) {
             console.log("Failed to resend verification code", error);
 
-            toast.error("Failed to resend verification code", { position: "top-right", autoClose: 3000 })
+            toast.error("Failed to resend verification code", 
+                { 
+                    position: "top-right", 
+                    autoClose: 2000 
+                })
         } finally {
             setResending(false)
         }

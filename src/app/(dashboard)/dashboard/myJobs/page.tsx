@@ -5,7 +5,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { Separator } from "@radix-ui/react-separator";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Search, Loader2, ChevronDown, Eye, Pencil, Trash } from "lucide-react";
+import { Search, Eye, Pencil, Trash } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -114,7 +114,7 @@ const MyJobs = () => {
                 setJobs(jobs.map((job) => (job._id === jobId ? { ...job, status: newStatus } : job)));
                 toast.success("Status updated successfully");
             }
-        } catch (error) {
+        } catch {
             toast.error("Failed to update status");
         }
     };
@@ -133,7 +133,7 @@ const MyJobs = () => {
                 setSelectedJobs(selectedJobs.filter((id) => id !== jobId));
                 toast.success("Job deleted successfully");
             }
-        } catch (error) {
+        } catch {
             toast.error("Failed to delete job");
         }
     };
@@ -153,7 +153,7 @@ const MyJobs = () => {
                 setSelectedJobs([]);
                 toast.success("Selected jobs deleted successfully");
             }
-        } catch (error) {
+        } catch {
             toast.error("Failed to delete selected jobs");
         }
     };
@@ -172,7 +172,7 @@ const MyJobs = () => {
                 setSelectedJobs([]);
                 toast.success("All jobs deleted successfully");
             }
-        } catch (error) {
+        } catch {
             toast.error("Failed to delete all jobs");
         }
     };
@@ -434,7 +434,7 @@ const MyJobs = () => {
                     {/* Toast */}
                     <ToastContainer
                         position="top-right"
-                        autoClose={3000}
+                        autoClose={1000}
                         hideProgressBar={false}
                         newestOnTop={false}
                         closeOnClick

@@ -192,7 +192,6 @@ const Login = () => {
             {/* for toast */}
             <ToastContainer
                 position="top-right"
-                autoClose={3000}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick

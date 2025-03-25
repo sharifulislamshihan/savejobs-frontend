@@ -77,7 +77,7 @@ const AddJob = () => {
             if (response.status === 200) {
                 toast.success("Job added successfully!", {
                     position: "top-right",
-                    autoClose: 3000,
+                    autoClose: 1000,
                 })
                 // Reset the input field after successful submission
                 reset();
@@ -149,7 +149,6 @@ const AddJob = () => {
             {/* for toast */}
             <ToastContainer
                 position="top-right"
-                autoClose={3000}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick

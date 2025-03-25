@@ -96,7 +96,11 @@ const Verify = () => {
             const errorMessage = axios.isAxiosError(error) && error.response?.data?.message
                 ? error.response.data.message
                 : "An error occurred"
-            toast.error(errorMessage, { position: "top-right", autoClose: 3000 })
+            toast.error(errorMessage, 
+                { 
+                    position: "top-right", 
+                    autoClose: 3000 
+                })
         } finally {
             setIsLoading(false)
         }
@@ -114,12 +118,20 @@ const Verify = () => {
                 localStorage.setItem('verificationEndTime', newEndTime.toString())
                 setTimeLeft(600)
 
-                toast.success("Verification code resent successfully", { position: "top-right", autoClose: 3000 })
+                toast.success("Verification code resent successfully", 
+                    { 
+                        position: "top-right", 
+                        autoClose: 2000 
+                    })
             }
         } catch (error) {
             console.log("Failed to resend verification code", error);
 
-            toast.error("Failed to resend verification code", { position: "top-right", autoClose: 3000 })
+            toast.error("Failed to resend verification code", 
+                { 
+                    position: "top-right", 
+                    autoClose: 2000 
+                })
         } finally {
             setResending(false)
         }
