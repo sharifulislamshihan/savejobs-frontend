@@ -69,7 +69,7 @@ const JobDetail = () => {
                 if (response.data.success) {
                     setJob(response.data.data);
                 }
-            } catch (error) {
+            } catch {
                 toast.error("Failed to fetch job details");
             } finally {
                 setIsLoading(false);
@@ -92,7 +92,7 @@ const JobDetail = () => {
                 toast.success("Job deleted successfully");
                 router.push("/dashboard/myJobs");
             }
-        } catch (error) {
+        } catch {
             toast.error("Failed to delete job");
         }
     };

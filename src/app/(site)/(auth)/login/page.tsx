@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Eye, EyeOff} from "lucide-react"
+import { Eye, EyeOff, Loader } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -13,7 +13,6 @@ import { baseUrl } from "@/lib/baseUrl"
 import { toast, ToastContainer } from "react-toastify"
 import { setCookie } from 'cookies-next';
 import { useAuth } from "@/hooks/useAuth"
-import Loading from "@/components/loading"
 
 const Login = () => {
 
@@ -59,7 +58,7 @@ const Login = () => {
             if (response.status === 200) {
                 toast.success("Logged in successfully!", {
                     position: "top-right",
-                    autoClose: 2000,
+                    autoClose: 1000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -154,7 +153,10 @@ const Login = () => {
                         className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={isLoading}
                     >
-                        {isLoading ? <Loading /> : "Sign In"}
+                        {isLoading ? (
+                            <Loader className="h-7 w-7 animate-spin" />)
+                            :
+                            ("Sign In")}
                     </button>
                 </form>
 

@@ -118,7 +118,7 @@ const EditJob = () => {
                         interviewDate: jobData.interviewDate?.split("T")[0] || "",
                     });
                 }
-            } catch (error) {
+            } catch {
                 toast.error("Failed to fetch job details");
             } finally {
                 setIsLoading(false);
@@ -141,7 +141,7 @@ const EditJob = () => {
                 toast.success("Job updated successfully");
                 router.push("/dashboard/myJobs");
             }
-        } catch (error) {
+        } catch {
             toast.error("Failed to update job");
         }
     };
