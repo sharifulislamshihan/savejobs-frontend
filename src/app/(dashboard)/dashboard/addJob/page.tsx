@@ -11,7 +11,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Send } from "lucide-react"
+import { Loader, Send } from "lucide-react"
 import { z } from "zod";
 import { jobDescriptionSchema } from "@/schemas/jobDescriptionSchema";
 import { useForm } from "react-hook-form";
@@ -127,8 +127,7 @@ const AddJob = () => {
                                     >
                                         {isLoading ? (
                                             <>
-                                                <Loading/>
-                                                Processing
+                                                <Loader className="animate-spin h-5 w-5" /> Processing
                                             </>
                                         ) : (
                                             <>

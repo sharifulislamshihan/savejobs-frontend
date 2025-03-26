@@ -19,7 +19,7 @@ export const registerSchema = z.object({
     password: z
         .string()
         .min(6, "Password must be atleast 6 characters")
-        .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, "Password must contain atleast one letter and one number"),
+        .regex(/^(?=.*[a-zA-Z])(?=.*\d).*$/, "Password must contain atleast one letter and one number"),
 
     image: z.string().optional(),
 })
