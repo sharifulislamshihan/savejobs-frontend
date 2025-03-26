@@ -114,7 +114,7 @@ const MyJobs = () => {
                 setJobs(jobs.map((job) => (job._id === jobId ? { ...job, status: newStatus } : job)));
                 toast.success("Status updated successfully");
             }
-        } catch {
+        } catch (error) {
             toast.error("Failed to update status");
         }
     };
@@ -133,7 +133,7 @@ const MyJobs = () => {
                 setSelectedJobs(selectedJobs.filter((id) => id !== jobId));
                 toast.success("Job deleted successfully");
             }
-        } catch {
+        } catch (error) {
             toast.error("Failed to delete job");
         }
     };
@@ -153,7 +153,7 @@ const MyJobs = () => {
                 setSelectedJobs([]);
                 toast.success("Selected jobs deleted successfully");
             }
-        } catch {
+        } catch (error) {
             toast.error("Failed to delete selected jobs");
         }
     };
@@ -172,7 +172,7 @@ const MyJobs = () => {
                 setSelectedJobs([]);
                 toast.success("All jobs deleted successfully");
             }
-        } catch {
+        } catch (error) {
             toast.error("Failed to delete all jobs");
         }
     };

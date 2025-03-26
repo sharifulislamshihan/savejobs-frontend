@@ -69,7 +69,7 @@ const JobDetail = () => {
                 if (response.data.success) {
                     setJob(response.data.data);
                 }
-            } catch {
+            } catch  {
                 toast.error("Failed to fetch job details");
             } finally {
                 setIsLoading(false);

@@ -14,13 +14,13 @@ const Footer = () => {
                             Privacy Policy
                         </Link>
                         <Link
-                            href="/terms"
+                            href="#"
                             className="text-sm text-center sm:text-left text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
                         >
                             Terms of Service
                         </Link>
                         <Link
-                            href="/contact"
+                            href="#"
                             className="text-sm text-center sm:text-left text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
                         >
                             Contact Us

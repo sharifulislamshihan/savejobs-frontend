@@ -36,7 +36,12 @@ const Register = () => {
         setSubmitting(true)
         try {
             //console.log("Sending data to backend:", data)
-            const response = await axios.post(`${baseUrl}auth/register`, data)
+            const response = await axios.post(`${baseUrl}/auth/register`, data, {
+                withCredentials: true, // Required for cookies (future-proof for login)
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
             //console.log("Backend response:", response.data)
 
             if (response.data.message === "User created successfully") {
@@ -65,7 +70,7 @@ const Register = () => {
         catch (error) {
             console.error("Error occurred while Registering. Try Again", error);
             const axiosError = error as AxiosError
-            const errorMessage = (axiosError.response?.data as { message: string }).message || "Error occurred while Registering"
+            const errorMessage = ((axiosError.response?.data as { message?: string })?.message || "Error occurred while Registering")
 
             toast.error(errorMessage, {
                 position: "top-right",

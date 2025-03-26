@@ -35,23 +35,24 @@ const Login = () => {
         setIsLoading(true)
         try {
             //console.log("data sending for loggedin user", data);
-            const response = await axios.post(`${baseUrl}auth/login`, data)
+            const response = await axios.post(`${baseUrl}/auth/login`, data, {
+                withCredentials: true, // Required to receive refreshToken cookie
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
             //console.log("response", response);
             //console.log("token", response.data.accessToken);
 
             //  // Store token in both localStorage and cookies
             if (response.data.accessToken) {
-                localStorage.setItem('accessToken', response.data.accessToken);
-
-                // Set in cookies
-                setCookie('accessToken', response.data.accessToken, {
-                    maxAge: 15 * 24 * 60 * 60, // 15 days (matching backend)
-                    path: '/',
-                    secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'strict',
+                localStorage.setItem("accessToken", response.data.accessToken);
+                setCookie("accessToken", response.data.accessToken, {
+                    maxAge: 15 * 24 * 60 * 60, // 15 days
+                    path: "/",
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", // Match backend
                 });
-
-                // set the user in the context
                 setUser(response.data.user);
             }
 
