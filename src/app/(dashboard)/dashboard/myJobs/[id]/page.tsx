@@ -60,7 +60,7 @@ const JobDetail = () => {
             }
 
             try {
-                const response = await axios.get(`${baseUrl}job/user-jobs/${id}`, {
+                const response = await axios.get(`${baseUrl}/job/user-jobs/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -82,7 +82,7 @@ const JobDetail = () => {
     const handleDelete = async () => {
         try {
             const token = getCookie("accessToken");
-            const response = await axios.delete(`${baseUrl}job/user-jobs/${id}`, {
+            const response = await axios.delete(`${baseUrl}/job/user-jobs/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

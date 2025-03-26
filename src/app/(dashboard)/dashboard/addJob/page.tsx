@@ -65,7 +65,7 @@ const AddJob = () => {
             // replacing all the new line characters with space
             const formattedJobData = formData.jobData.replace(/\n/g, " "); // Replace newlines with spaces
             const response = await axios.post(
-                `${baseUrl}job/generateJobs`,
+                `${baseUrl}/job/generateJobs`,
                 { id: user.id, prompt: formattedJobData }, // Ensure correct field names
                 {
                     headers: {

@@ -35,7 +35,7 @@ const Login = () => {
         setIsLoading(true)
         try {
             //console.log("data sending for loggedin user", data);
-            const response = await axios.post(`${baseUrl}/auth/login`, data, {
+            const response = await axios.post(`${baseUrl}//auth/login`, data, {
                 withCredentials: true, // Required to receive refreshToken cookie
                 headers: {
                     "Content-Type": "application/json",

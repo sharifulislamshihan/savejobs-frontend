@@ -70,7 +70,7 @@ const MyJobs = () => {
             }
 
             try {
-                const response = await axios.get(`${baseUrl}job/user-jobs`, {
+                const response = await axios.get(`${baseUrl}/job/user-jobs`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -101,7 +101,7 @@ const MyJobs = () => {
         try {
             const token = getCookie("accessToken");
             const response = await axios.put(
-                `${baseUrl}job/user-jobs/${jobId}`,
+                `${baseUrl}/job/user-jobs/${jobId}`,
                 { status: newStatus },
                 {
                     headers: {
@@ -122,7 +122,7 @@ const MyJobs = () => {
     const handleDelete = async (jobId: string) => {
         try {
             const token = getCookie("accessToken");
-            const response = await axios.delete(`${baseUrl}job/user-jobs/${jobId}`, {
+            const response = await axios.delete(`${baseUrl}/job/user-jobs/${jobId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -141,7 +141,7 @@ const MyJobs = () => {
     const handleDeleteSelected = async () => {
         try {
             const token = getCookie("accessToken");
-            const response = await axios.delete(`${baseUrl}job/user-jobs/multiple`, {
+            const response = await axios.delete(`${baseUrl}/job/user-jobs/multiple`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -161,7 +161,7 @@ const MyJobs = () => {
     const handleDeleteAll = async () => {
         try {
             const token = getCookie("accessToken");
-            const response = await axios.delete(`${baseUrl}job/user-jobs/all`, {
+            const response = await axios.delete(`${baseUrl}/job/user-jobs/all`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

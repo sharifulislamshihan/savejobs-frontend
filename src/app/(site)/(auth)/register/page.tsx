@@ -36,7 +36,7 @@ const Register = () => {
         setSubmitting(true)
         try {
             //console.log("Sending data to backend:", data)
-            const response = await axios.post(`${baseUrl}/auth/register`, data, {
+            const response = await axios.post(`${baseUrl}//auth/register`, data, {
                 withCredentials: true, // Required for cookies (future-proof for login)
                 headers: {
                     'Content-Type': 'application/json',

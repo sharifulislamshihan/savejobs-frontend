@@ -100,7 +100,7 @@ const EditJob = () => {
             }
 
             try {
-                const response = await axios.get(`${baseUrl}job/user-jobs/${id}`, {
+                const response = await axios.get(`${baseUrl}/job/user-jobs/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -131,7 +131,7 @@ const EditJob = () => {
     const onSubmit = async (data: JobFormData) => {
         try {
             const token = getCookie("accessToken");
-            const response = await axios.put(`${baseUrl}job/user-jobs/${id}`, data, {
+            const response = await axios.put(`${baseUrl}/job/user-jobs/${id}`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

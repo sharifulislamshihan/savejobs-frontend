@@ -97,7 +97,7 @@ const DashboardPage = () => {
 
             try {
                 // Fetch Job Stats
-                const statsResponse = await axios.get(`${baseUrl}job/user-jobs/stats`, {
+                const statsResponse = await axios.get(`${baseUrl}/job/user-jobs/stats`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 if (statsResponse.data.success) {
@@ -105,7 +105,7 @@ const DashboardPage = () => {
                 }
 
                 // Fetch Upcoming Deadlines and Interviews
-                const upcomingResponse = await axios.get(`${baseUrl}job/user-jobs/upcoming`, {
+                const upcomingResponse = await axios.get(`${baseUrl}/job/user-jobs/upcoming`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 if (upcomingResponse.data.success) {
@@ -113,7 +113,7 @@ const DashboardPage = () => {
                 }
 
                 // Fetch Monthly Trend
-                const trendResponse = await axios.get(`${baseUrl}job/user-jobs/monthly-trend`, {
+                const trendResponse = await axios.get(`${baseUrl}/job/user-jobs/monthly-trend`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 if (trendResponse.data.success) {
@@ -121,7 +121,7 @@ const DashboardPage = () => {
                 }
 
                 // Fetch Jobs by Source
-                const sourceResponse = await axios.get(`${baseUrl}job/user-jobs/jobs-by-source`, {
+                const sourceResponse = await axios.get(`${baseUrl}/job/user-jobs/jobs-by-source`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 if (sourceResponse.data.success) {

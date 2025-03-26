@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             }
 
             try {
-                const response = await axios.get(`${baseUrl}auth/me`, {
+                const response = await axios.get(`${baseUrl}/auth/me`, {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true,
                 });

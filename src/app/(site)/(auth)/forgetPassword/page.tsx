@@ -32,7 +32,7 @@ export default function ForgotPassword() {
     const onSubmit = async (data: ForgotPasswordData) => {
         setIsLoading(true)
         try {
-            const response = await axios.post(`${baseUrl}auth/forgetPassword`, {
+            const response = await axios.post(`${baseUrl}/auth/forgetPassword`, {
                 email: data.email,
             })
 

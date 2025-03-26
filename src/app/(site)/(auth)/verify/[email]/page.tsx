@@ -30,7 +30,7 @@ const Verify = () => {
     useEffect(() => {
         const fetchVerificationExpiry = async () => {
             try {
-                const response = await axios.get(`${baseUrl}user/email/${decodedEmail}`)
+                const response = await axios.get(`${baseUrl}/user/email/${decodedEmail}`)
 
                 // Get expiry time from backend
                 const expiryTime = new Date(response.data.data.verificationCodeExpiration).getTime();
@@ -75,7 +75,7 @@ const Verify = () => {
         setIsLoading(true)
 
         try {
-            const response = await axios.post(`${baseUrl}auth/verify`, {
+            const response = await axios.post(`${baseUrl}/auth/verify`, {
                 email: decodedEmail,
                 verificationCode: data.code
             })
@@ -112,7 +112,7 @@ const Verify = () => {
 
         setResending(true)
         try {
-            const response = await axios.post(`${baseUrl}auth/resend-code`, { email: decodedEmail })
+            const response = await axios.post(`${baseUrl}/auth/resend-code`, { email: decodedEmail })
             if (response.data.success) {
                 const newEndTime = Date.now() + 600 * 1000
                 localStorage.setItem('verificationEndTime', newEndTime.toString())
