@@ -21,7 +21,6 @@ import { baseUrl } from "@/lib/baseUrl";
 import { useAuth } from "@/hooks/useAuth";
 import { toast, ToastContainer } from "react-toastify";
 import { getCookie } from "cookies-next";
-import Loading from "@/components/loading";
 
 type jobDescriptionSchema = z.infer<typeof jobDescriptionSchema>
 
