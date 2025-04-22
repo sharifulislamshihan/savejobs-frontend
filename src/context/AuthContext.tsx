@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/loading";
 import { baseUrl } from "@/lib/baseUrl";
 import axios from "axios";
 import { getCookie } from "cookies-next";
@@ -21,14 +22,14 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true); // Add loading state
 
     useEffect(() => {
         const checkUser = async () => {
             const token = getCookie("accessToken");
 
-            //console.log("Token from auth context", token);
-
             if (!token) {
+                setLoading(false);
                 return;
             }
 
@@ -37,22 +38,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true,
                 });
-                //console.log("Response from auth context", response.data.data);
 
-
-                if (response.data.success) {
+                if (response.status === 200 && response.data.success) {
                     setUser(response.data.data);
-                    //console.log("User from auth context response", response.data.user);
-
+                } else {
+                    setUser(null); // Clear user if /auth/me fails
                 }
             } catch (error) {
                 console.error("Error checking user:", error);
+                setUser(null); // Clear user on error
+            } finally {
+                setLoading(false); // Set loading to false after check
             }
         };
-        //console.log("Checking user from auth context", user);
 
         checkUser();
     }, []);
+
+    // Show a loading state while checking user
+    if (loading) {
+        return <Loading/>;
+    }
 
     return (
         <AuthContext.Provider value={{ user, setUser }}>

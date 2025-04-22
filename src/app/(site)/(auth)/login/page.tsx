@@ -45,18 +45,18 @@ const Login = () => {
             //console.log("token", response.data.accessToken);
 
             //  // Store token in both localStorage and cookies
-            if (response.data.accessToken) {
-                localStorage.setItem("accessToken", response.data.accessToken);
-                setCookie("accessToken", response.data.accessToken, {
-                    maxAge: 15 * 24 * 60 * 60, // 15 days
-                    path: "/",
-                    secure: process.env.NODE_ENV === "production",
-                    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", // Match backend
-                });
-                setUser(response.data.user);
-            }
+            if (response.status === 200 && response.data.success) {
+                if (response.data.accessToken) {
+                    localStorage.setItem('accessToken', response.data.accessToken);
+                    setCookie('accessToken', response.data.accessToken, {
+                        maxAge: 15 * 24 * 60 * 60,
+                        path: '/',
+                        secure: process.env.NODE_ENV === 'production',
+                        sameSite: process.env.NODE_ENV === 'production' ? "none" : "strict",
+                    });
+                    setUser(response.data.user); // Update user state
+                }
 
-            if (response.status === 200) {
                 toast.success("Logged in successfully!", {
                     position: "top-right",
                     autoClose: 1000,
@@ -65,8 +65,16 @@ const Login = () => {
                     pauseOnHover: true,
                     draggable: true,
                 });
-                router.push("/dashboard")
-                //console.log("User logged in successfully");
+
+                // Wait briefly to ensure user state is updated
+                setTimeout(() => {
+                    router.push("/dashboard");
+                }, 500);
+            } else {
+                toast.error(response.data.message || "Login failed", {
+                    position: "top-right",
+                    autoClose: 2000,
+                });
             }
         } catch (error) {
 
